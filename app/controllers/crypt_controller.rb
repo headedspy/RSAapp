@@ -15,7 +15,7 @@ class CryptController < ApplicationController
 		n = Key.find(id.to_i).send(:n)
 
 		msg.each_char do |ch|
-			o = ((ch.ord)**e%n
+			o = ((ch.ord)**e)%n
 			new << o.to_s
 			new << "," if ch != message[-1]
 		end
