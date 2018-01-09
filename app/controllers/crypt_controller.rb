@@ -17,9 +17,7 @@ protect_from_forgery unless: -> {request.format.json?}
 		msg.each_char do |ch|
 			o = ((ch.ord)**e)%n
 			new << o.to_s
-			if ch != msg[-1]
-				new << ","
-			end
+			new << ","
 		end
 
 		a = Encrypted.create(:msg => new, :id=>getId())
