@@ -1,5 +1,5 @@
 class DecryptController < ApplicationController
-
+	protect_from_forgery unless: -> {request.format.json?}
 	def decryption
 		id = params[:id]
 		msg = params[:message]
