@@ -1,5 +1,5 @@
 class CryptController < ApplicationController
-
+protect_from_forgery unless: -> {request.format.json?}
 	@@ids = (1000..9999).to_a.shuffle
 
 	def getId
@@ -17,7 +17,7 @@ class CryptController < ApplicationController
 		msg.each_char do |ch|
 			o = ((ch.ord)**e)%n
 			new << o.to_s
-			new << "," if ch != message[-1]
+			new << "," if ch != msg[-1]
 		end
 
 		a = Encrypted.create(:msg => new, :id=>getId())
@@ -28,7 +28,7 @@ class CryptController < ApplicationController
 
 	def extract_encrypted
 		id = params[:msg_id]
-		msg = Encrypted.find(id.send(:msg))
+		msg = Encrypted.find(id).send(:msg)
 		res = {"message" => msg}
 		render json: res
 	end
