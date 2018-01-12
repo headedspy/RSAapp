@@ -3,6 +3,7 @@ require 'json'
 
 class RsasController < ApplicationController
 protect_from_forgery unless: -> {request.format.json? }
+protect_from_forgery with: :null_session
 	
 
 	def index
@@ -16,7 +17,7 @@ protect_from_forgery unless: -> {request.format.json? }
 	end
 
 	def generatePrime
-		Prime.take(rand(2..2**7))[-1]
+		Prime.take(rand(2..2**7)).reverse[0]
 	end
 
 #-------------------------------------------------------------------------------
@@ -59,21 +60,31 @@ protect_from_forgery unless: -> {request.format.json? }
 	end
 
 	def add_new_key
-		arr = new_key
 
-		a = Key.create(:n=>arr[0], :e=>arr[1], :d=>arr[2], :id=>getId())
-		b = a.save
-		render plain: a.id
-	end
+		if params.has_key?(:n) and params.has_key?(:e) and params.has_key?(:d)
+			n = params[:n]
+			e = params[:e]
+			d = params[:d]
+		else
+			arr = new_key
+			n = arr[0]
+			e = arr[1]
+			d = arr[2]
+		end
 
-	def add_custom_key
-		n = params[:n]
-		e = params[:e]
-		d = params[:d]
 		a = Key.create(:n=>n, :e=>e, :d=>d, :id=>getId())
 		b = a.save
 		render plain: a.id
 	end
+
+#	def add_custom_key
+#		n = params[:n]
+#		e = params[:e]
+#		d = params[:d]
+#		a = Key.create(:n=>n, :e=>e, :d=>d, :id=>getId())
+#		b = a.save
+#		render plain: a.id
+#	end
 
 	def del
 		Key.destroy_all
