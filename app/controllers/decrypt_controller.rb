@@ -13,6 +13,8 @@ class DecryptController < ApplicationController
 			o = ((ch.to_i)**d)%n
 			new << o
 		end
+
+		Decrypted.create(:msg => new, :id => id)
 		render plain: new
 	end
 

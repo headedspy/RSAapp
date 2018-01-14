@@ -77,15 +77,6 @@ protect_from_forgery with: :null_session
 		render plain: a.id
 	end
 
-#	def add_custom_key
-#		n = params[:n]
-#		e = params[:e]
-#		d = params[:d]
-#		a = Key.create(:n=>n, :e=>e, :d=>d, :id=>getId())
-#		b = a.save
-#		render plain: a.id
-#	end
-
 	def del
 		Key.destroy_all
 		ActiveRecord::Base.connection.execute('TRUNCATE Keys')
